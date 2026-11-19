@@ -38,7 +38,8 @@ def parse(path):
     for line in head.strip().split("\n"):
         key, value = line.split(": ", 1)
         f[key] = [v.strip() for v in value.split(",")] if key in LIST_KEYS else value
-    f["body"] = body.strip("\n")
+    body, _, zh = body.partition("\n<!-- zh -->\n")
+    f["body"], f["zh"] = body.strip("\n"), zh.strip("\n")
     if f["default"] == ["on"]:
         f["default"] = list(f["series"])
     elif f["default"] == ["off"]:
@@ -66,7 +67,14 @@ def build_catalog():
                 seen.add((f["id"], s))
             refs = set(f.get("requires", [])) | set(f.get("with", [])) | {m.group(1) for m in C.WHEN.finditer(f["body"])}
             assert refs <= ids | {"zh", "kind:grant"}, f"{where}: unknown reference {refs - ids}"
-            assert "{{" not in C.WHEN.sub("", f["body"]).replace("{{language}}", ""), f"{where}: malformed placeholder"
+            for text in (f["body"], f["zh"]):
+                assert "{{" not in C.WHEN.sub("", text).replace("{{language}}", ""), f"{where}: malformed placeholder"
+            en, zh = f["body"].split("\n"), f["zh"].split("\n")
+            assert [bool(x) for x in en] == [bool(x) for x in zh], f"{where}: zh must mirror the body line for line"
+            keys = lambda lines: [[m[0] for m in C.WHEN.findall(x)] for x in lines]  # noqa: E731
+            assert keys(en) == keys(zh), f"{where}: zh must use the same when-keys as the body"
+            for h in (f.get("group"), f.get("section")):
+                assert h is None or h in target["headings"], f"{where}: no translation for heading {h}"
     return catalog
 
 

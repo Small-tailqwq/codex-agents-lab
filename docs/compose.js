@@ -83,5 +83,5 @@
     return { text: text ? text + "\n" : "", selected, blocks: parts };
   }
 
-  root.AgentsCompose = { available, defaults, resolve, blocks, compose, isChinese };
+  root.AgentsCompose = { available, defaults, resolve, blocks, compose, fill, isChinese };
 })(globalThis);

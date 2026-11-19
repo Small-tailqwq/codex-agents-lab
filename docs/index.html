@@ -38,15 +38,12 @@ button { cursor: pointer; }
 
 main { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr); gap: 28px; align-items: start; max-width: 1320px; margin: 0 auto; padding: 0 24px 48px; }
 
-.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pick { display: grid; gap: 8px; }
 .seg { display: flex; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 3px; }
-.seg.wide { grid-column: 1 / -1; }
 .seg button { flex: 1; border: 0; background: none; border-radius: 7px; padding: 7px 10px; text-align: center; line-height: 1.25; }
 .seg button small { display: block; font-size: 11.5px; color: var(--muted); }
 .seg button[aria-checked="true"] { background: var(--ink); color: var(--bg); }
 .seg button[aria-checked="true"] small { color: inherit; opacity: 0.7; }
-.lang { display: flex; gap: 8px; }
-.lang select, .lang input { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 8px 10px; }
 .status { margin: 10px 2px 18px; font-size: 13px; color: var(--muted); }
 
 .scene { border-top: 1px solid var(--line); padding: 6px 0; }
@@ -69,7 +66,9 @@ main { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr)
 .note { grid-column: 1 / -1; margin: 0 0 8px 27px; padding: 8px 10px; font-size: 13px; color: var(--muted); background: var(--soft); border-radius: 8px; }
 .note b { color: var(--ink); font-weight: 600; }
 .note code, .status code { font: 12px var(--mono); }
-.acts { display: flex; gap: 2px; }
+.acts { display: flex; align-items: center; gap: 6px; }
+.acts select, .acts input { border: 1px solid var(--line); border-radius: 7px; background: var(--panel); padding: 3px 6px; font-size: 13px; font-weight: 400; }
+.acts input { width: 8.5em; }
 .link { border: 0; background: none; color: var(--muted); font-size: 13px; padding: 4px 6px; border-radius: 6px; }
 .link:hover { color: var(--ink); background: var(--soft); }
 .add { margin: 4px 0 6px 27px; border: 1px dashed var(--line); background: none; border-radius: 8px; padding: 7px 12px; color: var(--muted); }
@@ -85,26 +84,30 @@ main { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr)
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .btn:disabled { opacity: 0.45; cursor: default; }
 .btn.icon { padding: 6px 9px; }
+.btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 
 .doc { position: sticky; top: 16px; display: flex; flex-direction: column; max-height: calc(100vh - 32px); border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden; }
 .doc-bar { display: flex; align-items: center; gap: 8px; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--line); }
 .path { font: 13px var(--mono); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .size { margin-left: auto; font: 13px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
-#out { margin: 0; padding: 18px 20px 28px; overflow: auto; font: 13px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; flex: 1; min-height: 240px; }
-#out .blk { border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; transition: background 0.2s; }
+#out { position: relative; padding: 18px 20px 28px; overflow: auto; font: 13px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; flex: 1; min-height: 240px; }
+#out .blk { border-radius: 4px; transition: background 0.2s; }
 #out .blk.lit, #out .blk.flash { background: var(--lit); }
-#out .h { font-weight: 700; color: var(--accent); }
+#out .gap { height: 1.65em; overflow: hidden; }
+#out .h .ln { font-weight: 700; color: var(--accent); }
 #out .h3 { font-weight: 700; }
+#out .tr { margin: 1px 0 8px; padding-left: 10px; border-left: 2px solid var(--line); font: 13px/1.6 var(--ui); color: var(--muted); user-select: none; -webkit-user-select: none; }
+#out .tr.bullet { margin-left: 2ch; }
+#out .h .tr { margin-bottom: 0; }
 
 .dock { display: none; }
 @media (max-width: 860px) {
   main { grid-template-columns: minmax(0, 1fr); padding: 0 16px 96px; }
   .top { padding: 14px 16px 10px; }
   .doc { position: static; max-height: none; }
-  #out { max-height: none; }
-  .doc-bar .btn:not(.icon) { display: none; }
+  .doc-bar .btn:not(.keep) { display: none; }
   .doc-bar .size { display: none; }
-  .doc-bar .btn.icon { margin-left: auto; }
+  .doc-bar .path { margin-right: auto; }
   .dock { display: flex; align-items: center; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--panel); border-top: 1px solid var(--line); z-index: 5; }
   .dock .size { margin: 0 auto 0 0; }
 }
@@ -120,11 +123,7 @@ main { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr)
   <section aria-label="配置">
     <div class="pick">
       <div class="seg" role="radiogroup" aria-label="产品" id="seg-target"></div>
-      <div class="lang">
-        <select id="lang" aria-label="对话语言"></select>
-        <input id="lang-custom" aria-label="对话语言（英文名）" placeholder="English" hidden>
-      </div>
-      <div class="seg wide" role="radiogroup" aria-label="模型系列" id="seg-series"></div>
+      <div class="seg" role="radiogroup" aria-label="模型系列" id="seg-series"></div>
     </div>
     <p class="status" id="status"></p>
     <div id="scenes"></div>
@@ -133,11 +132,12 @@ main { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr)
     <div class="doc-bar">
       <span class="path" id="path"></span>
       <span class="size" data-size></span>
-      <button class="btn icon" data-act="reset" title="恢复默认" aria-label="恢复默认">↺</button>
+      <button class="btn keep" data-act="translate" aria-pressed="true" title="在每一行下面显示中文对照，复制和下载的内容不含对照">对照</button>
+      <button class="btn icon keep" data-act="reset" title="恢复默认" aria-label="恢复默认">↺</button>
       <button class="btn" data-act="download">下载</button>
       <button class="btn primary" data-act="copy">复制</button>
     </div>
-    <pre id="out" tabindex="0"></pre>
+    <div id="out" tabindex="0"></div>
   </section>
 </main>
 <div class="dock">

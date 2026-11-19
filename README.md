@@ -17,7 +17,7 @@
 
 ## 三种用法
 
-**在展示页上搭。** 打开[展示页](https://small-tailqwq.github.io/codex-agents-lab/)，选产品和模型系列，勾上自己的使用场景，右边实时出 AGENTS.md，复制或下载。Dot 的授权场景可以直接在页面上填。
+**在展示页上搭。** 打开[展示页](https://small-tailqwq.github.io/codex-agents-lab/)，选产品和模型系列，勾上自己的使用场景，右边实时出 AGENTS.md，复制或下载。片段是英文写的，每一行下面可以显示中文对照；对照只在页面上看，不进文件。Dot 的授权场景可以直接在页面上填。
 
 **让模型来配。** [`skills/agents-composer`](skills/agents-composer) 是一个 skill：模型问你几个选择题，从片段库里拼出 AGENTS.md，给你看过再安装。你原有的规则它会保留，并按下面的设计哲学过一遍。
 

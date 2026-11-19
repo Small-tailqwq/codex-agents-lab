@@ -19,7 +19,7 @@ Dot presets contain no authorization grants. Those are yours to write.
 
 ## Three ways to use it
 
-- **Compose on the page.** Pick the product, the model series, and the scenes that match how you work. The file updates as you go.
+- **Compose on the page.** Pick the product, the model series, and the scenes that match how you work. The file updates as you go. A Chinese rendering can be shown under each line; it is for reading only and never goes into the file.
 - **Let the model do it.** [`skills/agents-composer`](skills/agents-composer) is a skill that asks a few multiple-choice questions, assembles the file from the catalog, and installs it after you approve.
 
   ```sh

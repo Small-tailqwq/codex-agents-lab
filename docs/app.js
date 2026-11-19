@@ -12,17 +12,21 @@
     ["never", "Never", "即使中途被要求也不做的事（可空）"],
   ];
   const STORE = "agents-lab:grants";
+  const STORE_TR = "agents-lab:translation";
+  const FOCUS_KEYS = ["toggle", "scene", "more", "grantToggle", "grantEdit", "target", "series", "act"];
   const $ = (s) => document.querySelector(s);
 
   const state = {
     target: "codex", series: "6.2", lang: "Simplified Chinese", customLang: false,
     overrides: { codex: {}, dot: {} },
-    grants: [], open: new Set(), form: null,
+    grants: [], open: new Set(), form: null, translate: true,
   };
 
   // ---------- persistence
   try { state.grants = JSON.parse(localStorage.getItem(STORE)) || []; } catch { state.grants = []; }
-  const saveGrants = () => { try { localStorage.setItem(STORE, JSON.stringify(state.grants)); } catch { /* private mode */ } };
+  try { state.translate = localStorage.getItem(STORE_TR) !== "off"; } catch { /* private mode */ }
+  const save = (key, value) => { try { localStorage.setItem(key, value); } catch { /* private mode */ } };
+  const saveGrants = () => save(STORE, JSON.stringify(state.grants));
 
   function readHash() {
     const q = new URLSearchParams(location.hash.slice(1));
@@ -66,9 +70,21 @@
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const rich = (s) => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
   const CHEVRON = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const el = (tag, cls, text) => {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
 
   function badge(f) {
     return `<span class="badge ${f.evidence}" title="${esc(catalog.evidence_hint[f.evidence])}">${catalog.evidence[f.evidence]}</span>`;
+  }
+
+  function langControl() {
+    const options = LANGS.map(([v, l]) => `<option value="${v}"${!state.customLang && v === state.lang ? " selected" : ""}>${l}</option>`).join("");
+    return `<select id="lang" aria-label="对话语言">${options}<option value=""${state.customLang ? " selected" : ""}>其他…</option></select>`
+      + (state.customLang ? `<input id="lang-custom" aria-label="对话语言的英文名" placeholder="English" value="${esc(state.lang)}">` : "");
   }
 
   function fragmentRow(f, view, label) {
@@ -78,11 +94,11 @@
     const locked = auto || forced;
     const open = state.open.has(f.id);
     const tag = auto ? '<span class="tag">附带</span>' : forced ? `<span class="tag" title="${esc("「" + view.neededBy[f.id].join("」「") + "」需要它")}">依赖</span>` : "";
-    const acts = f.kind === "grant" ? `<button class="link" data-rewrite="${f.id}">改写</button>` : "";
+    const acts = (f.id === "language" ? langControl() : "") + (f.kind === "grant" ? `<button class="link" data-rewrite="${f.id}">改写</button>` : "");
     return `<div class="row${on ? " on" : ""}${locked ? " locked" : ""}" data-id="${f.id}">
       <label><input type="checkbox" data-toggle="${f.id}"${on ? " checked" : ""}${locked ? " disabled" : ""}><span class="t">${esc(label || f.title)}</span>${tag}</label>
       <span class="acts">${acts}${badge(f)}</span>
-      <button class="more" data-more="${f.id}" aria-expanded="${open}" aria-label="依据" ${f.note ? "" : "hidden"}>${CHEVRON}</button>
+      ${f.note ? `<button class="more" data-more="${f.id}" aria-expanded="${open}" aria-label="依据">${CHEVRON}</button>` : "<span></span>"}
       ${open && f.note ? `<div class="note">${label ? `<b>${esc(f.title)}</b>　` : ""}${rich(f.note)}</div>` : ""}
     </div>`;
   }
@@ -126,36 +142,48 @@
     for (const box of document.querySelectorAll("[data-mixed='true']")) box.indeterminate = true;
   }
 
+  // The preview is one <div> per line, so a translation can sit under the line it belongs to.
   function renderPreview(view, flash) {
     const out = $("#out");
-    out.textContent = "";
+    const top = out.scrollTop;
+    const byId = new Map(view.result.selected.map((f) => [f.id, f]));
+    const present = view.result.selected.map((f) => f.id);
+    const langLabel = (LANGS.find(([v]) => v === state.lang) || [0, state.lang])[1];
+    const nodes = [];
     for (const b of view.result.blocks) {
-      if (b.sep) out.append(b.sep);
-      const span = document.createElement("span");
-      span.className = "blk";
-      if (b.id) span.dataset.id = b.id; else span.classList.add("h");
+      if (b.sep === "\n\n") nodes.push(el("div", "gap", "\n"));
+      const block = el("div", b.id ? "blk" : "blk h");
+      if (b.id) block.dataset.id = b.id;
+      const fragment = b.id && byId.get(b.id);
+      let zh = null;
+      if (state.translate) zh = b.id ? (fragment.zh ? AC.fill(fragment.zh, langLabel, present).split("\n") : null) : [view.target.headings[b.text]];
       b.text.split("\n").forEach((line, i) => {
-        if (i) span.append("\n");
-        if (b.id && line.startsWith("#")) {
-          const strong = document.createElement("span");
-          strong.className = "h3"; strong.textContent = line; span.append(strong);
-        } else span.append(line);
+        if (!line) return block.append(el("div", "gap", "\n"));
+        block.append(el("div", b.id && line.startsWith("#") ? "ln h3" : "ln", line));
+        if (zh && zh[i]) {
+          const bullet = zh[i].startsWith("- ");
+          block.append(el("div", bullet ? "tr bullet" : "tr", zh[i].replace(/^(#+ |- )/, "")));
+        }
       });
-      out.append(span);
+      nodes.push(block);
     }
+    out.replaceChildren(...nodes);
+    out.scrollTop = top;
+
     const bytes = new TextEncoder().encode(view.result.text).length;
     const size = bytes < 1000 ? `${bytes} B` : `${(bytes / 1000).toFixed(1)} KB`;
-    for (const el of document.querySelectorAll("[data-size]")) el.textContent = size;
-    for (const el of document.querySelectorAll("[data-act='copy'], [data-act='download']")) el.disabled = !bytes;
-    if (flash) {
-      const el = out.querySelector(`[data-id="${flash}"]`);
-      if (el) {
-        el.classList.add("flash");
-        setTimeout(() => el.classList.remove("flash"), 900);
-        if (getComputedStyle($(".doc")).position === "sticky") {
-          out.scrollTo({ top: el.offsetTop - out.offsetTop - 60, behavior: "smooth" });
-        }
-      }
+    for (const node of document.querySelectorAll("[data-size]")) node.textContent = size;
+    for (const node of document.querySelectorAll("[data-act='copy'], [data-act='download']")) node.disabled = !bytes;
+    $("[data-act='translate']").setAttribute("aria-pressed", state.translate);
+
+    const target = flash && out.querySelector(`[data-id="${flash}"]`);
+    if (target) {
+      target.classList.add("flash");
+      setTimeout(() => target.classList.remove("flash"), 900);
+      const scrollsItself = out.scrollHeight > out.clientHeight + 1;
+      const above = target.offsetTop < out.scrollTop;
+      const below = target.offsetTop + Math.min(target.offsetHeight, out.clientHeight) > out.scrollTop + out.clientHeight;
+      if (scrollsItself && (above || below)) out.scrollTo({ top: Math.max(0, target.offsetTop - 48), behavior: "smooth" });
     }
   }
 
@@ -164,21 +192,39 @@
       `<button role="radio" aria-checked="${id === state.target}" data-target="${id}">${esc(t.label)}</button>`).join("");
     $("#seg-series").innerHTML = catalog.series.map((s) =>
       `<button role="radio" aria-checked="${s.id === state.series}" data-series="${s.id}">${esc(s.label)}<small>${esc(s.models)}</small></button>`).join("");
-    $("#lang").innerHTML = LANGS.map(([v, l]) => `<option value="${v}">${l}</option>`).join("") + '<option value="">其他…</option>';
-    $("#lang").value = state.customLang ? "" : state.lang;
-    $("#lang-custom").hidden = !state.customLang;
-    if (state.customLang && document.activeElement !== $("#lang-custom")) $("#lang-custom").value = state.lang;
     $("#status").innerHTML = rich(view.target.status[state.series]);
     $("#path").textContent = view.target.install;
   }
 
+  // Re-rendering replaces the element that has focus; find its successor and put focus back.
+  function focusSelector(node) {
+    if (!node || node === document.body) return null;
+    if (node.id) return "#" + node.id;
+    for (const key of FOCUS_KEYS) {
+      if (key in node.dataset) return `[data-${key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())}="${node.dataset[key]}"]`;
+    }
+    return null;
+  }
+  function keepingFocus(work) {
+    const active = document.activeElement;
+    const selector = focusSelector(active);
+    const caret = active && active.id === "lang-custom" ? [active.selectionStart, active.selectionEnd] : null;
+    work();
+    const next = selector && document.querySelector(selector);
+    if (!next || next === document.activeElement) return;
+    next.focus({ preventScroll: true });
+    if (caret) next.setSelectionRange(...caret);
+  }
+
   let last;
   function render(flash) {
-    last = compute();
-    renderControls(last);
-    renderScenes(last);
-    renderPreview(last, flash);
-    writeHash(last);
+    keepingFocus(() => {
+      last = compute();
+      renderControls(last);
+      renderScenes(last);
+      renderPreview(last, flash);
+      writeHash(last);
+    });
   }
 
   // ---------- events
@@ -189,6 +235,20 @@
       if (line) v[key] = line.slice(label.length + 4);
     }
     return v;
+  }
+
+  function copyText(text, button) {
+    const done = () => { const old = button.textContent; button.textContent = "已复制"; setTimeout(() => (button.textContent = old), 1200); };
+    const fallback = () => {
+      const area = el("textarea", "sr");
+      area.value = text;
+      document.body.append(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      done();
+    };
+    return navigator.clipboard ? navigator.clipboard.writeText(text).then(done, fallback) : fallback();
   }
 
   document.addEventListener("click", (e) => {
@@ -210,7 +270,11 @@
       saveGrants();
       return render(turnOn[0] && turnOn[0].id);
     }
-    if (d.more) { state.open.has(d.more) ? state.open.delete(d.more) : state.open.add(d.more); return render(); }
+    if (d.more) {
+      // Opening a note changes nothing in the file, so the preview is left alone.
+      state.open.has(d.more) ? state.open.delete(d.more) : state.open.add(d.more);
+      return keepingFocus(() => renderScenes(last));
+    }
     if (d.rewrite) {
       const f = last.fragments.find((x) => x.id === d.rewrite);
       state.form = { index: null, values: parseGrant(f), from: f.id };
@@ -222,15 +286,8 @@
     if (d.grantDelete) { state.grants.splice(+d.grantDelete, 1); state.form = null; saveGrants(); return render(); }
     if ("formCancel" in d) { state.form = null; return render(); }
     if (d.act === "reset") { state.overrides[state.target] = {}; return render(); }
-    if (d.act === "copy") {
-      const done = () => { const old = t.textContent; t.textContent = "已复制"; setTimeout(() => (t.textContent = old), 1200); };
-      const fallback = () => {
-        const range = document.createRange(); range.selectNodeContents($("#out"));
-        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
-        document.execCommand("copy"); sel.removeAllRanges(); done();
-      };
-      return navigator.clipboard ? navigator.clipboard.writeText(last.result.text).then(done, fallback) : fallback();
-    }
+    if (d.act === "translate") { state.translate = !state.translate; save(STORE_TR, state.translate ? "on" : "off"); return render(); }
+    if (d.act === "copy") return copyText(last.result.text, t);
     if (d.act === "download") {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(new Blob([last.result.text], { type: "text/markdown" }));
@@ -248,30 +305,31 @@
     state.form = null; saveGrants();
     render(`grant-custom-${state.grants.slice(0, index + 1).filter((g) => !g.off).length}`);
   });
+
+  document.addEventListener("change", (e) => {
+    if (e.target.id !== "lang") return;
+    state.customLang = !e.target.value;
+    state.lang = e.target.value || "English";
+    render();
+    if (state.customLang) { $("#lang-custom").focus(); $("#lang-custom").select(); }
+  });
   document.addEventListener("input", (e) => {
     if (state.form && e.target.closest("#grant-form")) state.form.values[e.target.name] = e.target.value;
+    if (e.target.id === "lang-custom" && !e.isComposing) { state.lang = e.target.value.trim() || "English"; render(); }
   });
-
-  $("#lang").addEventListener("change", (e) => {
-    state.customLang = !e.target.value;
-    state.lang = e.target.value || $("#lang-custom").value.trim() || "English";
-    render();
-    if (state.customLang) $("#lang-custom").focus();
-  });
-  $("#lang-custom").addEventListener("input", (e) => { state.lang = e.target.value.trim() || "English"; render(); });
 
   // hover links a row with its text in the preview, both ways
-  const lit = (id, on) => { for (const el of document.querySelectorAll(`[data-id="${id}"]`)) el.classList.toggle("lit", on); };
+  const lit = (id, on) => { for (const node of document.querySelectorAll(`[data-id="${id}"]`)) node.classList.toggle("lit", on); };
   for (const type of ["mouseover", "mouseout"]) {
     document.addEventListener(type, (e) => {
-      const el = e.target.closest && e.target.closest("[data-id]");
-      if (el) lit(el.dataset.id, type === "mouseover");
+      const node = e.target.closest && e.target.closest("[data-id]");
+      if (node) lit(node.dataset.id, type === "mouseover");
     });
   }
   $("#out").addEventListener("click", (e) => {
-    const el = e.target.closest("[data-id]");
-    const row = el && document.querySelector(`.row[data-id="${el.dataset.id}"]`);
-    if (row && !String(getSelection())) row.scrollIntoView({ block: "center", behavior: "smooth" });
+    const block = e.target.closest("[data-id]");
+    const row = block && document.querySelector(`.row[data-id="${block.dataset.id}"]`);
+    if (row && !String(getSelection())) row.scrollIntoView({ block: "nearest", behavior: "smooth" });
   });
 
   $("#link-repo").href = REPO;

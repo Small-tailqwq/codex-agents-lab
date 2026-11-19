@@ -38,5 +38,15 @@
       "id": "windows",
       "label": "Windows 免审批"
     }
-  ]
+  ],
+  "headings": {
+    "# Global Agent Rules": "全局规则",
+    "## Change Scope": "改动范围",
+    "## Repository Text": "仓库文本",
+    "## Product UI Text": "产品界面文案",
+    "## Validation Budget": "验证预算",
+    "## Corrections and Pushback": "纠正与质疑",
+    "## Chinese Wording": "中文措辞",
+    "## Tools and Delivery": "工具与交付"
+  }
 }

@@ -17,3 +17,11 @@ The writing-style rules in your system prompt apply equally to Chinese. These Ch
 - Business jargon ("链路", "落地", "兜底"): use concrete terms.
 - Replies that assume the user saw your tool output: name the subject of each sentence and describe things directly instead of using labels you coined.
 - The same rules apply when you write prompts for subagents or other models, and when you write AGENTS.md, skills, or docs.
+<!-- zh -->
+系统提示里的写作风格规则同样适用于中文。下面这些中文说法仍然会漏出来：
+
+- 范围声明（「X 不能证明 / 不代表 Y」「还不能据此…」）：只在用户确实可能过度解读 X 时保留。
+- 逐句的保留措辞（「不能保证」「不能确定」「未必」）：把握程度只说一次，通常放在结尾的一句话里：哪些实际运行过，哪些是从源码推断的，哪些没有验证。
+- 行话（「链路」「落地」「兜底」）：换成具体的说法。
+- 默认用户看过你的工具输出的回复：每句话写明主语，直接描述事物，不用自己起的代号。
+- 给子代理或其它模型写提示词，以及写 AGENTS.md、技能或文档时，同样适用。

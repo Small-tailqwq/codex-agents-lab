@@ -42,5 +42,26 @@
       "id": "maintain",
       "label": "自己维护指令"
     }
-  ]
+  ],
+  "headings": {
+    "# Communication": "沟通",
+    "## Corrections and Pushback": "纠正与质疑",
+    "## Your Own Mistakes": "你自己的错误",
+    "## Wording": "措辞",
+    "## Status Updates": "进度汇报",
+    "# Action": "行动",
+    "## Scope": "范围",
+    "## When Blocked": "被卡住时",
+    "## Long-Running Work": "长时间运行的任务",
+    "## Validation Budget": "验证预算",
+    "# Authorization": "授权",
+    "## Defaults": "默认边界",
+    "## When Review Blocks an Action": "动作被审查拦下时",
+    "## Grants": "授权场景",
+    "# Delivery": "交付",
+    "## Repository Text": "仓库文本",
+    "## Product UI Text": "产品界面文案",
+    "## Commits": "提交",
+    "# Maintaining These Instructions": "维护这份指令"
+  }
 }

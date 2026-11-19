@@ -14,6 +14,7 @@
 | `with` | Not chosen directly. Include it when any listed fragment is included; `kind:grant` means any grant |
 | `group`, `section` | Heading lines that precede the body |
 | `body` | The text |
+| `zh` | A Chinese rendering of `body`, line for line, for explaining a fragment to a Chinese-reading user. It never goes into the file |
 
 Steps:
 
