@@ -91,6 +91,8 @@ python tools/build.py --check  # 校验
 
 `--check` 做三件事：生成物没有过期；默认片段拼起来与实验里用的原文件逐字节相同；展示页的拼装逻辑与 skill 的脚本对随机选择给出相同结果。片段格式见 [fragments/README.md](fragments/README.md)。
 
+改了 `docs/` 下的脚本也要运行一次 `python tools/build.py`：它会更新 `index.html` 里脚本地址后面的内容哈希，浏览器才不会拿缓存的旧脚本去配新页面。
+
 ## License
 
 [MIT](LICENSE)

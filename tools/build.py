@@ -5,8 +5,10 @@
     python tools/build.py --check  fail if a generated file is stale, a preset no longer reproduces
                                    the AGENTS.md it was cut from, or docs/compose.js disagrees with compose.py
 """
+import hashlib
 import json
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -87,6 +89,12 @@ def outputs(catalog):
     for name, target in catalog["targets"].items():
         for s in catalog["series"]:
             files[f"presets/{name}-{s['id']}/AGENTS.md"] = C.compose(target, s["id"])[0]
+
+    # Stamp each script URL with a hash of its content, so a browser never pairs a new page with a cached old script.
+    def stamp(m):
+        text = files.get(f"docs/{m.group(1)}.js") or read(ROOT / f"docs/{m.group(1)}.js")
+        return f'src="{m.group(1)}.js?v={hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]}"'
+    files["docs/index.html"] = re.sub(r'src="(catalog|compose|app)\.js(?:\?v=[0-9a-f]*)?"', stamp, read(ROOT / "docs/index.html"))
     return files
 
 
