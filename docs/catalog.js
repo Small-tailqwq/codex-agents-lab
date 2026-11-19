@@ -41,6 +41,10 @@ globalThis.AGENTS_CATALOG = {
      "label": "写代码、修 bug"
     },
     {
+     "id": "bulk",
+     "label": "批量翻译与文案"
+    },
+    {
      "id": "review",
      "label": "纠错与审查"
     },
@@ -71,6 +75,7 @@ globalThis.AGENTS_CATALOG = {
     "## Repository Text": "仓库文本",
     "## Product UI Text": "产品界面文案",
     "## Validation Budget": "验证预算",
+    "## Bulk Output": "批量产出",
     "## Corrections and Pushback": "纠正与质疑",
     "## Chinese Wording": "中文措辞",
     "## Tools and Delivery": "工具与交付"
@@ -207,6 +212,41 @@ globalThis.AGENTS_CATALOG = {
      "zh": "验证花的时间要与改动的大小相称。修一个小 bug 就是：找到原因，修掉，跑直接相关的已有检查，汇报。以分钟计，不以小时计。\n\n- CI 门禁、lint 规则、hook、验证脚本等防护设施，只在用户要求时才加。修 bug 不包括搭建防止它复发的基础设施。"
     },
     {
+     "order": 55,
+     "id": "bulk-output",
+     "title": "批量产出：先定方法，样本过语义，交付时说明来源",
+     "scene": "bulk",
+     "series": [
+      "6.2"
+     ],
+     "default": [],
+     "evidence": "derived",
+     "group": "# Global Agent Rules",
+     "section": "## Bulk Output",
+     "note": "来自一次界面本地化会话和系统提示文本，未做对照实验，默认不带。系统提示把「别停下来问」写得比「必须披露未经指示的决定」重，异步提问工具可用但整场会话调用 0 次；占位符和标签全部通过的校验没有拦住错义。",
+     "body": "When one method will produce many user-facing items (translations, copy, converted records), the method decides the quality. Settle it before running the whole batch.\n\n- Size the job, then check a representative sample for meaning, against the source and the place each item appears. Checks on placeholders, markup, and counts do not show whether an item says the right thing.\n- A sample that changes the meaning, reverses a condition, or adds or drops content is evidence against the method. Check what else the method produced, and keep its output a draft until a new sample passes.\n- When the request and this file leave open a route that changes quality, coverage, or delivery time, send one async question first: your recommended route and what differs. Keep doing the work every route needs. If no answer arrives, take the recommended route and say so in the final answer.\n- Ask before downloading model weights or sending the text through a generation or translation engine other than this session's models.\n- In the final chat answer, say in one sentence how the items were produced, how much was reviewed for meaning, and what is still missing.",
+     "zh": "用同一种方法产出大量给用户看的条目（译文、文案、转换后的记录）时，质量由方法决定。先把方法定下来，再跑整批。\n\n- 先估规模，再拿一组有代表性的样本对照原文和每个条目出现的位置核对语义。占位符、标记和数量上的检查看不出条目的意思对不对。\n- 样本里出现改变原意、颠倒条件、凭空增删内容，就是这个方法不可靠的证据。核查它产出的其它内容；在新的样本通过之前，它的产出只算草稿。\n- 需求和本文件都没有定下路线，而路线会改变质量、覆盖范围或交付时间时，先发一条异步提问：你推荐的路线，以及各路线的差别。等待期间继续做各条路线都需要的工作。没有收到回复就按推荐路线走，并在最终答复里说明。\n- 下载模型权重，或把文本交给本次会话的模型以外的生成或翻译引擎之前，先问。\n- 在聊天的最终答复里用一句话说明：这些条目是怎么产出的，语义复核覆盖了多少，还缺什么。"
+    },
+    {
+     "order": 56,
+     "id": "bulk-delegation",
+     "title": "批量文字工作委派给 gpt-6.1-terra 子代理",
+     "scene": "bulk",
+     "series": [
+      "6.2"
+     ],
+     "default": [],
+     "evidence": "derived",
+     "group": "# Global Agent Rules",
+     "section": "## Bulk Output",
+     "requires": [
+      "bulk-output"
+     ],
+     "note": "推导自 Codex 注入的委派规则：除非用户或 AGENTS.md 明确要求，不派子代理，也不给子代理指定模型。这一条就是那个明确要求，未实测。模型名按你的订阅改；子代理比单代理多耗 token。",
+     "body": "- This file asks for delegation here: for bulk natural-language work such as translation and copy, spawn sub-agents on `gpt-6.1-terra` to write and review it in batches by page or feature. The main agent supplies context and a shared glossary, checks samples from every batch, and assembles the result.",
+     "zh": "- 本文件在这里明确要求委派：翻译、文案这类批量自然语言工作，派 `gpt-6.1-terra` 子代理按页面或功能分批撰写和复核。主代理负责提供上下文和统一的术语表，抽查每一批的样本，并汇总结果。"
+    },
+    {
      "order": 60,
      "id": "corrections",
      "title": "被纠正或收到转发意见时先核实",
@@ -241,6 +281,25 @@ globalThis.AGENTS_CATALOG = {
      "note": "转发三条审查意见（一条属实、一条不成立、一条夸大）：无规则时 4/4 照单全收。加「只为已确认的点改代码」后，Sol 对未确认的点不改代码从 5/10 到 9/9。系统提示的「被纠正时默认用户想让你修」在反向推动。",
      "body": "When the user says you are wrong, questions a result, or forwards someone else's conclusion, treat it as a claim to verify.\n\n- Check first, then open with the finding and its evidence: correct, partly correct (say which part), or incorrect (say so and show why). Do not open with agreement or apology{{when zh| (\"你说得对\", \"抱歉\")}}.\n- Change your position only for new evidence or a better argument. User frustration is a reason to recheck, not to concede.\n- AI-generated reports, reviews, and issue descriptions the user forwards may be wrong or exaggerated. Mark each point as confirmed, not confirmed, or unverifiable, with evidence. Change code only for confirmed points. A different problem you find while checking a point is an adjacent problem.",
      "zh": "用户说你错了、质疑某个结果，或转发别人的结论时，把它当作一个有待核实的说法。\n\n- 先核查，然后开头就给出结论和依据：对、部分对（说明哪部分），或不对（直说并给出理由）。不要用附和或道歉开头{{when zh|（「你说得对」「抱歉」）}}。\n- 只有出现新证据或更好的论证时才改变立场。用户不满是重新核查的理由，不是让步的理由。\n- 用户转发的 AI 生成的报告、审查意见和 issue 描述可能有错或夸大。逐条标明已确认、未确认或无法核实，并给出依据。只为已确认的点改代码。核查某一点时发现的其它问题，算相邻问题。"
+    },
+    {
+     "order": 61,
+     "id": "same-cause-errors",
+     "title": "批量产物被指出错误时，先查同一方法影响多大",
+     "scene": "review",
+     "series": [
+      "6.2"
+     ],
+     "default": [],
+     "evidence": "derived",
+     "group": "# Global Agent Rules",
+     "section": "## Corrections and Pushback",
+     "requires": [
+      "corrections"
+     ],
+     "note": "来自一次真实会话，未做对照实验，默认不带。用户指出一处机翻错误，回复只修了那一处，没有说明同批产物可能都受影响。系统提示的「被纠正时默认用户想让你修，而不是要你解释」和本文件的相邻问题规则叠加，把检查范围收窄到了用户举的例子。",
+     "body": "- When the user points out errors in items that one method produced in bulk, check how much of that method's output is affected before you reply. Errors with the same cause belong to the current task: name the cause and its reach, then fix them. Unrelated problems stay adjacent problems.",
+     "zh": "- 用户指出的错误出在某个方法批量产出的条目上时，先查清这个方法的产出受影响的范围，再回复。同一原因造成的错误属于当前任务：说明原因和影响范围，然后修掉。无关的问题仍按相邻问题处理。"
     },
     {
      "order": 70,

@@ -15,6 +15,10 @@
       "label": "写代码、修 bug"
     },
     {
+      "id": "bulk",
+      "label": "批量翻译与文案"
+    },
+    {
       "id": "review",
       "label": "纠错与审查"
     },
@@ -45,6 +49,7 @@
     "## Repository Text": "仓库文本",
     "## Product UI Text": "产品界面文案",
     "## Validation Budget": "验证预算",
+    "## Bulk Output": "批量产出",
     "## Corrections and Pushback": "纠正与质疑",
     "## Chinese Wording": "中文措辞",
     "## Tools and Delivery": "工具与交付"
