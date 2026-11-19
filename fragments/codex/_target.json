@@ -1,0 +1,42 @@
+{
+  "label": "Codex",
+  "install": "~/.codex/AGENTS.md",
+  "status": {
+    "6.2": "对照实验定稿，2026-11-18，138 次运行",
+    "6.1": "GPT-6 Astra 上的现行版，2026-11-14"
+  },
+  "scenes": [
+    {
+      "id": "base",
+      "label": "语言"
+    },
+    {
+      "id": "code",
+      "label": "写代码、修 bug"
+    },
+    {
+      "id": "review",
+      "label": "纠错与审查"
+    },
+    {
+      "id": "git",
+      "label": "仓库与提交"
+    },
+    {
+      "id": "ui",
+      "label": "做界面"
+    },
+    {
+      "id": "wording",
+      "label": "中文文风"
+    },
+    {
+      "id": "github",
+      "label": "GitHub 评论"
+    },
+    {
+      "id": "windows",
+      "label": "Windows 免审批"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+已修复 [列表查询](notebox/query.py) 多取一条的问题。实测 `python -m notebox.cli list --limit 5` 输出 5 条，`--limit 0` 无输出。现有 5 项测试全部通过。

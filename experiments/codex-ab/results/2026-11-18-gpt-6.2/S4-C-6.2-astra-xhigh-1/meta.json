@@ -1,0 +1,16 @@
+{
+ "id": "S4-C-6.2-astra-xhigh-1",
+ "scenario": "S4",
+ "arm": "C",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 38.2
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "f0ef10bb71c72bd6a2246c9c3db8ca562d9f7f9f\nInitial import\n\n----\n"
+}

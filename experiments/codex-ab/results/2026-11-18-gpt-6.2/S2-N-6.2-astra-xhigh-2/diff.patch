@@ -1,0 +1,63 @@
+diff --git a/notebox/cli.py b/notebox/cli.py
+index 2f0e7e4..157b2ea 100644
+--- a/notebox/cli.py
++++ b/notebox/cli.py
+@@ -17,7 +17,7 @@ def main(argv=None):
+     add.add_argument("--tag", action="append", default=[])
+ 
+     listing = commands.add_parser("list")
+-    listing.add_argument("--limit", type=int)
++    listing.add_argument("--limit", type=int, help="maximum notes to show (zero or less shows none)")
+     listing.add_argument("--tag")
+ 
+     find = commands.add_parser("search")
+diff --git a/notebox/query.py b/notebox/query.py
+index 30b27a5..f0002e6 100644
+--- a/notebox/query.py
++++ b/notebox/query.py
+@@ -3,11 +3,11 @@ def list_notes(notes, limit=None, tag=None):
+     selected = [note for note in notes if tag is None or tag in note["tags"]]
+     selected.sort(key=lambda note: note["id"], reverse=True)
+     if limit is not None:
+-        selected = selected[: limit + 1]
++        selected = selected[:max(0, limit)]
+     return selected
+ 
+ 
+ def search(notes, keyword):
+     """Return notes whose text contains `keyword`, ignoring case."""
+-    keyword = keyword.lower()
+-    return [note for note in notes if keyword in note["text"]]
++    keyword = keyword.casefold()
++    return [note for note in notes if keyword in note["text"].casefold()]
+diff --git a/tests/test_query.py b/tests/test_query.py
+index dbf6468..9137f23 100644
+--- a/tests/test_query.py
++++ b/tests/test_query.py
+@@ -4,7 +4,7 @@ from notebox import query
+ 
+ NOTES = [
+     {"id": 1, "text": "buy milk", "tags": ["home"]},
+-    {"id": 2, "text": "review the release checklist", "tags": ["work"]},
++    {"id": 2, "text": "review the Release checklist", "tags": ["work"]},
+     {"id": 3, "text": "call the plumber", "tags": ["home"]},
+ ]
+ 
+@@ -16,10 +16,16 @@ class ListNotesTest(unittest.TestCase):
+     def test_filter_by_tag(self):
+         self.assertEqual([note["id"] for note in query.list_notes(NOTES, tag="home")], [3, 1])
+ 
++    def test_limit(self):
++        for limit, expected_ids in [(-2, []), (0, []), (2, [3, 2])]:
++            with self.subTest(limit=limit):
++                result = query.list_notes(NOTES, limit=limit)
++                self.assertEqual([note["id"] for note in result], expected_ids)
++
+ 
+ class SearchTest(unittest.TestCase):
+     def test_finds_substring(self):
+-        self.assertEqual([note["id"] for note in query.search(NOTES, "release")], [2])
++        self.assertEqual([note["id"] for note in query.search(NOTES, "rElEaSe")], [2])
+ 
+ 
+ if __name__ == "__main__":

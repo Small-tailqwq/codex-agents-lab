@@ -1,0 +1,16 @@
+{
+ "id": "S8-L-6.2-sol-xhigh-1",
+ "scenario": "S8",
+ "arm": "L",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 30.1
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "34e5a0bd7f80324ca8a4cbf698f790364a62536f\nInitial import\n\n----\n"
+}

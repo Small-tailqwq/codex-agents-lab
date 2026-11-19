@@ -1,0 +1,55 @@
+diff --git a/notebox/cli.py b/notebox/cli.py
+index 2f0e7e4..a86f76d 100644
+--- a/notebox/cli.py
++++ b/notebox/cli.py
+@@ -28,6 +28,8 @@ def main(argv=None):
+         note = store.add(args.text, args.tag)
+         print(format_note(note))
+     elif args.command == "list":
++        if args.limit is not None and args.limit < 0:
++            listing.error("--limit must be non-negative")
+         for note in query.list_notes(store.load(), args.limit, args.tag):
+             print(format_note(note))
+     elif args.command == "search":
+diff --git a/notebox/query.py b/notebox/query.py
+index 30b27a5..2bd8c60 100644
+--- a/notebox/query.py
++++ b/notebox/query.py
+@@ -3,11 +3,11 @@ def list_notes(notes, limit=None, tag=None):
+     selected = [note for note in notes if tag is None or tag in note["tags"]]
+     selected.sort(key=lambda note: note["id"], reverse=True)
+     if limit is not None:
+-        selected = selected[: limit + 1]
++        selected = selected[:limit]
+     return selected
+ 
+ 
+ def search(notes, keyword):
+     """Return notes whose text contains `keyword`, ignoring case."""
+     keyword = keyword.lower()
+-    return [note for note in notes if keyword in note["text"]]
++    return [note for note in notes if keyword in note["text"].lower()]
+diff --git a/tests/test_query.py b/tests/test_query.py
+index dbf6468..c72b91f 100644
+--- a/tests/test_query.py
++++ b/tests/test_query.py
+@@ -16,11 +16,19 @@ class ListNotesTest(unittest.TestCase):
+     def test_filter_by_tag(self):
+         self.assertEqual([note["id"] for note in query.list_notes(NOTES, tag="home")], [3, 1])
+ 
++    def test_limit_caps_results(self):
++        self.assertEqual(query.list_notes(NOTES, limit=1, tag="home"), [NOTES[2]])
++        self.assertEqual(query.list_notes(NOTES, limit=0), [])
++
+ 
+ class SearchTest(unittest.TestCase):
+     def test_finds_substring(self):
+         self.assertEqual([note["id"] for note in query.search(NOTES, "release")], [2])
+ 
++    def test_ignores_case_in_text_and_keyword(self):
++        note = {"id": 4, "text": "Review the Release Checklist", "tags": []}
++        self.assertEqual(query.search([note], "rELEASE"), [note])
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

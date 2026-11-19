@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="山间茶事茶馆的茶单、营业时间、地址及茶席预约信息。">
+  <meta name="theme-color" content="#f7f4eb">
+  <title>山间茶事｜茶馆</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f4eb;
+      --card: #fdfaf2;
+      --ink: #243b30;
+      --muted: #596258;
+      --line: #d9d5c7;
+      --green: #244137;
+      --cream: #fff7e7;
+      --copper: #9c462f;
+      --gold: #e4ae76;
+      --serif: "Songti SC", "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", SimSun, serif;
+      --sans: system-ui, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    h1, h2, h3, p, dl, dd { margin: 0; }
+    h1, h2, h3 { font-family: var(--serif); }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    [id] { scroll-margin-top: 1.5rem; }
+
+    .shell {
+      width: min(75rem, calc(100% - 5rem));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 5.625rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      font: 700 1.25rem/1.2 var(--serif);
+      letter-spacing: .12em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      aspect-ratio: 1;
+      border: 1px solid var(--copper);
+      border-radius: 2px;
+      color: var(--copper);
+      font-size: 1.0625rem;
+      letter-spacing: 0;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      font-size: .875rem;
+    }
+
+    .site-nav a, .site-footer a { white-space: nowrap; }
+    .site-nav a:not(.nav-booking):hover, .site-footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: .3em;
+    }
+
+    .nav-booking {
+      padding: .425rem .9375rem;
+      border: 1px solid #8c988d;
+      border-radius: 2px;
+    }
+
+    .nav-booking:hover { background: #e8ece2; }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-items: center;
+      min-height: clamp(25rem, 36vw, 30rem);
+      overflow: hidden;
+      padding: clamp(2.25rem, 6vw, 5.5rem);
+      background: var(--green);
+      color: var(--cream);
+    }
+
+    .hero h1 {
+      font-size: clamp(3.75rem, 6.9vw, 6.5rem);
+      font-weight: 700;
+      line-height: 1.13;
+      letter-spacing: .065em;
+    }
+
+    .hero h1::before {
+      display: block;
+      width: 2.75rem;
+      height: 2px;
+      margin-bottom: 1.625rem;
+      background: var(--gold);
+      content: "";
+    }
+
+    .hero p {
+      margin-top: 1.25rem;
+      color: #e2e6d8;
+      font-size: clamp(.9375rem, 1.5vw, 1.0625rem);
+      letter-spacing: .065em;
+    }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding: .65rem 1rem;
+      border-radius: 2px;
+      background: var(--cream);
+      color: var(--green);
+      font-size: .875rem;
+      font-weight: 600;
+    }
+
+    .hero-link:hover { background: #f5dcba; }
+    .hero-link:focus-visible { outline-color: var(--cream); }
+
+    .contours {
+      position: absolute;
+      z-index: -1;
+      top: 6%;
+      left: 54%;
+      display: grid;
+      place-items: center;
+      width: 59%;
+      height: 139%;
+      transform: rotate(-24deg);
+      pointer-events: none;
+    }
+
+    .contours span {
+      position: absolute;
+      inset: calc(var(--ring) * 5%);
+      border: 1px solid rgb(225 222 192 / 27%);
+      border-radius: 50%;
+    }
+
+    .contours::after {
+      width: clamp(2.25rem, 5.25vw, 4.75rem);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--gold);
+      content: "";
+    }
+
+    .section { margin-top: clamp(3.25rem, 6vw, 5.5rem); }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.22;
+      letter-spacing: .075em;
+    }
+
+    .section-note, .hours-note {
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    .tea-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tea-card {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      padding: clamp(1.25rem, 2.25vw, 2rem);
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .tea-type {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--muted);
+      font-size: .8125rem;
+      letter-spacing: .08em;
+    }
+
+    .tea-type::before {
+      width: .4375rem;
+      height: .4375rem;
+      border-radius: 50%;
+      background: var(--tea-accent);
+      content: "";
+    }
+
+    .tea-card h3 {
+      margin-top: .625rem;
+      font-size: clamp(1.4375rem, 2.25vw, 1.8125rem);
+      line-height: 1.35;
+    }
+
+    .tasting-note {
+      margin-top: .5rem;
+      color: var(--muted);
+      font-size: .9375rem;
+    }
+
+    .tea-price {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      color: var(--copper);
+      font-size: 1.25rem;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tea-price span {
+      color: var(--muted);
+      font-size: .8125rem;
+      font-weight: 400;
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, .85fr) minmax(0, 1.15fr);
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .visit-panel {
+      padding: clamp(1.25rem, 2.5vw, 2.125rem);
+      font-size: .9375rem;
+    }
+
+    .visit-panel + .visit-panel { border-left: 1px solid var(--line); }
+
+    .visit-panel h3 {
+      margin-bottom: .7rem;
+      font-size: 1.5rem;
+      line-height: 1.35;
+    }
+
+    .hours-note { margin-bottom: .25rem; }
+
+    .hours > div {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0 .75rem;
+      padding: .25rem 0;
+    }
+
+    .hours > div + div { border-top: 1px solid var(--line); }
+    .hours dd { font-variant-numeric: tabular-nums; }
+    .booking { background: #e8ede3; }
+
+    .booking .contact-status {
+      margin-top: 1rem;
+      padding-top: .75rem;
+      border-top: 1px solid #c8d1c3;
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem 1rem;
+      margin-top: 3.5rem;
+      padding-block: 1.25rem 1.75rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    @media (max-width: 54rem) {
+      .shell { width: calc(100% - 3rem); }
+      .contours { left: 60%; }
+      .visit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .visit-grid .booking {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+    }
+
+    @media (max-width: 38rem) {
+      .shell { width: calc(100% - 2rem); }
+
+      .site-header {
+        flex-wrap: wrap;
+        gap: .75rem 1rem;
+        min-height: 0;
+        padding-block: .9375rem;
+      }
+
+      .brand { gap: .5rem; font-size: 1.125rem; }
+      .brand-mark { width: 1.625rem; font-size: .875rem; }
+      .site-nav { gap: .875rem; font-size: .8125rem; }
+      .nav-booking { padding: .25rem .4375rem; }
+
+      .hero {
+        align-items: start;
+        min-height: 23rem;
+        padding: 2.25rem 1.375rem;
+      }
+
+      .hero h1 { font-size: clamp(2.625rem, 11vw, 4rem); }
+      .hero h1::before { margin-bottom: 1.25rem; }
+      .hero p { letter-spacing: .015em; }
+      .hero-link { margin-top: 1.5rem; }
+
+      .contours {
+        top: 51%;
+        left: 34%;
+        width: 94%;
+        height: 67%;
+      }
+
+      .tea-list, .visit-grid { grid-template-columns: minmax(0, 1fr); }
+      .tea-list { gap: .75rem; }
+      .visit-panel + .visit-panel {
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+      .site-footer { margin-top: 2.5rem; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="site-header shell">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">山</span>
+      山间茶事
+    </a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="#menu">茶单</a>
+      <a href="#visit">到店信息</a>
+      <a class="nav-booking" href="#booking">预约茶席</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="site-title">
+      <div class="contours" aria-hidden="true">
+        <span style="--ring: 0"></span>
+        <span style="--ring: 1"></span>
+        <span style="--ring: 2"></span>
+        <span style="--ring: 3"></span>
+        <span style="--ring: 4"></span>
+        <span style="--ring: 5"></span>
+        <span style="--ring: 6"></span>
+        <span style="--ring: 7"></span>
+      </div>
+      <div>
+        <h1 id="site-title">山间茶事</h1>
+        <p>到店可点茶，也可提前预约茶席。</p>
+        <a class="hero-link" href="#menu">查看茶单 <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="menu" aria-labelledby="menu-title">
+      <div class="section-heading">
+        <h2 id="menu-title">茶单</h2>
+        <p class="section-note">茶品与价格为示例</p>
+      </div>
+      <ul class="tea-list" role="list">
+        <li class="tea-card" style="--tea-accent: #78865e">
+          <p class="tea-type">白茶</p>
+          <h3>福鼎白牡丹</h3>
+          <p class="tasting-note">清甜柔和，带有毫香与淡淡花香。</p>
+          <p class="tea-price">¥48 <span>/ 壶</span></p>
+        </li>
+        <li class="tea-card" style="--tea-accent: #a96a45">
+          <p class="tea-type">乌龙茶</p>
+          <h3>武夷肉桂</h3>
+          <p class="tasting-note">焙火香里带着桂皮香，茶汤醇厚。</p>
+          <p class="tea-price">¥68 <span>/ 壶</span></p>
+        </li>
+        <li class="tea-card" style="--tea-accent: #a3503f">
+          <p class="tea-type">红茶</p>
+          <h3>正山小种</h3>
+          <p class="tasting-note">茶汤温润，入口有自然的甜香。</p>
+          <p class="tea-price">¥56 <span>/ 壶</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" id="visit" aria-labelledby="visit-title">
+      <div class="section-heading">
+        <h2 id="visit-title">到店信息</h2>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-panel">
+          <h3>营业时间</h3>
+          <p class="hours-note">以下时段为示例</p>
+          <dl class="hours">
+            <div><dt>周二至周五</dt><dd>12:00–20:00</dd></div>
+            <div><dt>周六至周日</dt><dd>10:00–21:00</dd></div>
+            <div><dt>周一</dt><dd>休息</dd></div>
+          </dl>
+        </div>
+        <div class="visit-panel">
+          <h3>地址</h3>
+          <p>门店地址待公布</p>
+        </div>
+        <div class="visit-panel booking" id="booking">
+          <h3>预约茶席</h3>
+          <p>通过电话或微信预约。<br>请提供到店日期、时间和人数。</p>
+          <p class="contact-status">预约电话及微信号待公布</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <p>山间茶事</p>
+    <a href="#top">回到顶部 <span aria-hidden="true">↑</span></a>
+  </footer>
+</body>
+</html>

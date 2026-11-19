@@ -1,0 +1,5 @@
+# Session transcripts stay local.
+sessions/
+.claude/
+__pycache__/
+*.pyc

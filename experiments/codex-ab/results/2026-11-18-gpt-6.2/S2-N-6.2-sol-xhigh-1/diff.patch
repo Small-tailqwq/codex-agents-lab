@@ -1,0 +1,53 @@
+diff --git a/notebox/query.py b/notebox/query.py
+index 30b27a5..7286434 100644
+--- a/notebox/query.py
++++ b/notebox/query.py
+@@ -1,13 +1,16 @@
+ def list_notes(notes, limit=None, tag=None):
+-    """Return notes newest first, optionally filtered by tag and capped at `limit`."""
++    """Return notes newest first, optionally filtered by tag and capped at `limit`.
++
++    A non-positive limit returns no notes.
++    """
+     selected = [note for note in notes if tag is None or tag in note["tags"]]
+     selected.sort(key=lambda note: note["id"], reverse=True)
+     if limit is not None:
+-        selected = selected[: limit + 1]
++        selected = selected[:max(0, limit)]
+     return selected
+ 
+ 
+ def search(notes, keyword):
+     """Return notes whose text contains `keyword`, ignoring case."""
+-    keyword = keyword.lower()
+-    return [note for note in notes if keyword in note["text"]]
++    keyword = keyword.casefold()
++    return [note for note in notes if keyword in note["text"].casefold()]
+diff --git a/tests/test_query.py b/tests/test_query.py
+index dbf6468..1c4ece5 100644
+--- a/tests/test_query.py
++++ b/tests/test_query.py
+@@ -16,11 +16,23 @@ class ListNotesTest(unittest.TestCase):
+     def test_filter_by_tag(self):
+         self.assertEqual([note["id"] for note in query.list_notes(NOTES, tag="home")], [3, 1])
+ 
++    def test_applies_limit(self):
++        for limit, expected in [(1, [3]), (0, []), (-2, [])]:
++            with self.subTest(limit=limit):
++                self.assertEqual(
++                    [note["id"] for note in query.list_notes(NOTES, limit=limit)],
++                    expected,
++                )
++
+ 
+ class SearchTest(unittest.TestCase):
+     def test_finds_substring(self):
+         self.assertEqual([note["id"] for note in query.search(NOTES, "release")], [2])
+ 
++    def test_ignores_case_in_keyword_and_note_text(self):
++        notes = [{"id": 1, "text": "Release Checklist", "tags": []}]
++        self.assertEqual(query.search(notes, "rElEaSe"), notes)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

@@ -1,0 +1,1 @@
+`make check` 失败，退出码为 `1`。`makefile` 第 5 行调用了 `python tools/check.py`，但 Python 找不到该文件，检查未执行。

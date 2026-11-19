@@ -1,0 +1,1 @@
+已将列表切片的上限从 `limit + 1` 改为 `limit`。实测 `python -m notebox.cli list --limit 5` 现在恰好输出最新的 5 条笔记，3 个现有查询测试均通过。

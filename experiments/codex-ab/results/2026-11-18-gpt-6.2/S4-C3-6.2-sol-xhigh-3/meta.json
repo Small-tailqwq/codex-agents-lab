@@ -1,0 +1,16 @@
+{
+ "id": "S4-C3-6.2-sol-xhigh-3",
+ "scenario": "S4",
+ "arm": "C3",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 48.1
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "a3fe75e6155fdbc6ea97cef4fa9682b8e8545bba\nInitial import\n\n----\n"
+}

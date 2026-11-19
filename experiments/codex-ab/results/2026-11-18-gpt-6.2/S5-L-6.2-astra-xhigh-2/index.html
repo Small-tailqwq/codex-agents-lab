@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#203e32">
+  <title>山间茶事 · 茶单与到店指南</title>
+  <style>
+    :root {
+      --paper: #f9f7f0;
+      --ink: #203e32;
+      --muted: #60685d;
+      --rule: #cdcfc1;
+      --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+    body, h1, h2, h3, p, dl, dd { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 3px solid #b66834; outline-offset: 5px; }
+    section[id], div[id] { scroll-margin-top: 24px; }
+    .wrap { width: min(1152px, 88%); margin-inline: auto; }
+
+    .masthead, .brand, nav, .booking-link, .menu-link, .section-head {
+      display: flex;
+      align-items: center;
+    }
+    .masthead { min-height: 78px; justify-content: space-between; gap: 20px; }
+    .brand { gap: 12px; font: bold 23px/1 var(--serif); letter-spacing: .1em; }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      color: var(--paper);
+      background: var(--ink);
+      border-radius: 4px;
+    }
+    .mark::before {
+      content: "";
+      width: 17px;
+      height: 10px;
+      margin-top: 4px;
+      border: 2px solid;
+      border-top: 0;
+      background: linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
+    }
+    .mark::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 5px;
+      background: currentColor;
+      transform: translateY(-6px);
+    }
+    nav { gap: 28px; font-size: 14px; }
+    nav a:hover, footer a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .booking-link { padding: 9px 15px; gap: 12px; border: 1px solid #8a9889; border-radius: 2px; }
+    .arrow { font: normal 17px/1 Arial, sans-serif; }
+
+    .hero { position: relative; isolation: isolate; overflow: hidden; color: var(--paper); background: var(--ink); }
+    .hero .wrap { position: relative; padding-block: 64px 62px; }
+    h1 { font: 500 clamp(64px, 6.8vw, 98px)/1.18 var(--serif); letter-spacing: .09em; }
+    .hero p { margin-top: 16px; color: #e0e3d4; font: 18px/1.7 var(--serif); letter-spacing: .06em; }
+    .menu-link {
+      width: fit-content;
+      margin-top: 30px;
+      padding: 12px 19px;
+      gap: 26px;
+      color: var(--ink);
+      background: #f2eedf;
+      border-radius: 2px;
+      font-size: 14px;
+    }
+    .menu-link:hover { background: #fffdf7; }
+
+    .contours { position: absolute; z-index: -1; inset: 0 0 0 45%; overflow: hidden; }
+    .moon {
+      position: absolute;
+      top: 17%;
+      right: 24%;
+      width: 42px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #c1ae7d;
+    }
+    .hill {
+      position: absolute;
+      display: block;
+      width: 115%;
+      height: 122%;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: repeating-radial-gradient(ellipse closest-side,
+        var(--field) 0, var(--field) 10px, var(--line) 11px, var(--field) 12px);
+    }
+    .far { --field: #294638; --line: #69765b; left: 42%; top: 38%; transform: rotate(-17deg); }
+    .mid { --field: #254235; --line: #697a60; left: -5%; top: 69%; transform: rotate(-14deg); }
+    .near { --field: #203e32; --line: #7b8665; left: 28%; top: 89%; transform: rotate(-23deg); }
+    .contours::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--ink), transparent 27%);
+    }
+
+    .tea-menu { padding-block: 55px 62px; }
+    .section-head { justify-content: space-between; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid #748470; }
+    h2 { font: bold 34px/1.25 var(--serif); letter-spacing: .08em; }
+    .section-note { color: var(--muted); font-size: 13px; }
+    .teas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 6.5%; }
+    .tea {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: baseline;
+      gap: 12px;
+      padding-block: 23px 21px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .kind {
+      align-self: start;
+      margin-top: 3px;
+      padding: 2px 6px;
+      border: 1px solid #c3c9b8;
+      color: #52634c;
+      font: 13px/1.45 var(--serif);
+      white-space: nowrap;
+    }
+    h3 { font: bold 23px/1.3 var(--serif); letter-spacing: .04em; }
+    .tea p { margin-top: 6px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .price { font: 24px/1 Georgia, var(--serif); font-variant-numeric: lining-nums tabular-nums; }
+    .price small { font-size: 14px; margin-right: 3px; }
+
+    .visit { padding-block: 44px 48px; background: #eeeee3; }
+    .visit dl { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 28px; }
+    .visit dl > div + div { padding-left: 10%; border-left: 1px solid #c2c8b8; }
+    dt { margin-bottom: 9px; color: #53624f; font-size: 14px; }
+    dd { font: 20px/1.55 var(--serif); }
+    .visit dd p { margin-top: 4px; color: var(--muted); font: 14px/1.65 "Microsoft YaHei", sans-serif; }
+    footer .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 22px; color: var(--muted); font-size: 13px; }
+    footer a { padding: 5px 0; }
+
+    @media (max-width: 740px) {
+      .wrap { width: 89%; }
+      .masthead { min-height: 66px; }
+      .brand { font-size: 20px; gap: 8px; }
+      nav { gap: 16px; }
+      .hero .wrap { padding-block: 55px; }
+      .contours { left: 39%; }
+      .teas { grid-template-columns: 1fr; }
+      .tea-menu { padding-block: 38px 44px; }
+      .tea { padding-block: 18px; }
+      .visit dl { grid-template-columns: 1fr; gap: 18px; }
+      .visit dl > div + div { padding: 18px 0 0; border-left: 0; border-top: 1px solid var(--rule); }
+    }
+    @media (max-width: 520px) {
+      .masthead { gap: 6px; }
+      nav { gap: 10px; font-size: 13px; }
+      .booking-link { padding: 7px 9px; gap: 5px; }
+      .brand { font-size: 17px; letter-spacing: .04em; }
+      .mark { width: 29px; height: 29px; }
+      h1 { font-size: clamp(48px, 12vw, 62px); }
+      .hero .wrap { padding-block: 40px 64px; }
+      .hero p { font-size: 15px; letter-spacing: 0; }
+      .contours { inset: 33% -16% 0 28%; }
+      .moon { width: 23px; top: 6%; right: 28%; }
+      .menu-link { margin-top: 23px; padding: 10px 14px; gap: 16px; }
+      h2 { font-size: 28px; }
+      h3 { font-size: 21px; }
+      .tea { gap: 9px; }
+    }
+    @media (max-width: 360px) {
+      nav { gap: 6px; }
+      .booking-link .arrow { display: none; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="wrap masthead">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>山间茶事</a>
+    <nav aria-label="主导航">
+      <a href="#menu">茶单</a>
+      <a href="#visit">到店指南</a>
+      <a class="booking-link" href="#booking">预约茶席 <span class="arrow" aria-hidden="true">↘</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="name">
+      <div class="contours" aria-hidden="true">
+        <span class="moon"></span>
+        <span class="hill far"></span>
+        <span class="hill mid"></span>
+        <span class="hill near"></span>
+      </div>
+      <div class="wrap">
+        <h1 id="name">山间茶事</h1>
+        <p>温壶，投茶，等一片叶子慢慢舒展。</p>
+        <a class="menu-link" href="#menu">浏览茶单 <span class="arrow" aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="wrap tea-menu" id="menu" aria-labelledby="menu-title">
+      <div class="section-head">
+        <h2 id="menu-title">茶单</h2>
+        <p class="section-note">示例茶单 · 元 / 位</p>
+      </div>
+      <div class="teas">
+        <article class="tea">
+          <span class="kind">绿茶</span>
+          <div><h3>西湖龙井</h3><p>嫩豆香清鲜，入口甘爽。</p></div>
+          <span class="price"><small>¥</small>48</span>
+        </article>
+        <article class="tea">
+          <span class="kind">白茶</span>
+          <div><h3>白牡丹</h3><p>毫香里透着花香，滋味柔和。</p></div>
+          <span class="price"><small>¥</small>48</span>
+        </article>
+        <article class="tea">
+          <span class="kind">乌龙</span>
+          <div><h3>武夷肉桂</h3><p>桂皮香与焙火香交织，茶汤醇厚。</p></div>
+          <span class="price"><small>¥</small>68</span>
+        </article>
+        <article class="tea">
+          <span class="kind">乌龙</span>
+          <div><h3>凤凰单丛</h3><p>蜜兰香馥郁，饮后回甘。</p></div>
+          <span class="price"><small>¥</small>58</span>
+        </article>
+        <article class="tea">
+          <span class="kind">红茶</span>
+          <div><h3>祁门红茶</h3><p>花果香细柔，茶汤甘醇。</p></div>
+          <span class="price"><small>¥</small>48</span>
+        </article>
+        <article class="tea">
+          <span class="kind">普洱</span>
+          <div><h3>熟普洱</h3><p>陈香沉稳，汤感绵滑。</p></div>
+          <span class="price"><small>¥</small>58</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="visit" id="visit" aria-labelledby="visit-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="visit-title">到店指南</h2>
+          <p class="section-note">门店资料示例</p>
+        </div>
+        <dl>
+          <div><dt>营业时间</dt><dd>10:00 – 19:00<p>周二至周日营业，周一店休。</p></dd></div>
+          <div><dt>茶馆地址</dt><dd>青山镇茶山路 18 号</dd></div>
+          <div id="booking"><dt>预约方式</dt><dd>到店预约<p>请在前台登记到店日期、时段和人数。</p></dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span>山间茶事</span><a href="#top">回到页首 ↑</a></div>
+  </footer>
+</body>
+</html>

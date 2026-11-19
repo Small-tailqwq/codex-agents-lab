@@ -1,0 +1,47 @@
+diff --git a/notebox/query.py b/notebox/query.py
+index 30b27a5..cd59447 100644
+--- a/notebox/query.py
++++ b/notebox/query.py
+@@ -3,11 +3,11 @@ def list_notes(notes, limit=None, tag=None):
+     selected = [note for note in notes if tag is None or tag in note["tags"]]
+     selected.sort(key=lambda note: note["id"], reverse=True)
+     if limit is not None:
+-        selected = selected[: limit + 1]
++        selected = selected[: max(0, limit)]
+     return selected
+ 
+ 
+ def search(notes, keyword):
+     """Return notes whose text contains `keyword`, ignoring case."""
+-    keyword = keyword.lower()
+-    return [note for note in notes if keyword in note["text"]]
++    keyword = keyword.casefold()
++    return [note for note in notes if keyword in note["text"].casefold()]
+diff --git a/tests/test_query.py b/tests/test_query.py
+index dbf6468..14846ec 100644
+--- a/tests/test_query.py
++++ b/tests/test_query.py
+@@ -16,11 +16,23 @@ class ListNotesTest(unittest.TestCase):
+     def test_filter_by_tag(self):
+         self.assertEqual([note["id"] for note in query.list_notes(NOTES, tag="home")], [3, 1])
+ 
++    def test_caps_results_at_limit(self):
++        self.assertEqual([note["id"] for note in query.list_notes(NOTES, limit=1)], [3])
++
++    def test_nonpositive_limits_return_no_notes(self):
++        for limit in (0, -1, -2):
++            with self.subTest(limit=limit):
++                self.assertEqual(query.list_notes(NOTES, limit=limit), [])
++
+ 
+ class SearchTest(unittest.TestCase):
+     def test_finds_substring(self):
+         self.assertEqual([note["id"] for note in query.search(NOTES, "release")], [2])
+ 
++    def test_ignores_case(self):
++        notes = [{"id": 1, "text": "Call the MILK supplier", "tags": []}]
++        self.assertEqual(query.search(notes, "mIlK"), notes)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

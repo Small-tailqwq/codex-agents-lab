@@ -1,0 +1,20 @@
+{
+ "id": "S3-L-6.2-sol-xhigh-2",
+ "scenario": "S3",
+ "arm": "L",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 149.2
+  },
+  {
+   "exit": 0,
+   "seconds": 76.7
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "5cad219a26a7b96fa741811b2eb39c1e88534037\nFix case-insensitive note search\n\nCo-Authored-By: GPT-6 <noreply@openai.com>\n\n----\na88d01112cf53805bd2245ff281693d93cd39f16\nInitial import\n\n----\n"
+}

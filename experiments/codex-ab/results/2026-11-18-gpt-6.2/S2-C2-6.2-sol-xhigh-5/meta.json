@@ -1,0 +1,16 @@
+{
+ "id": "S2-C2-6.2-sol-xhigh-5",
+ "scenario": "S2",
+ "arm": "C2",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 93.0
+  }
+ ],
+ "diff_stat": " notebox/query.py    | 2 +-\n tests/test_query.py | 4 ++++\n 2 files changed, 5 insertions(+), 1 deletion(-)\n",
+ "status": " M notebox/query.py\n M tests/test_query.py\n",
+ "log": "0a2471ba8d7435906da49fd911f57bc9c3e536f1\nInitial import\n\n----\n"
+}

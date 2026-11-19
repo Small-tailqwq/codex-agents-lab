@@ -1,0 +1,20 @@
+{
+ "id": "S3-N-6.2-sol-xhigh-1",
+ "scenario": "S3",
+ "arm": "N",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 172.6
+  },
+  {
+   "exit": 0,
+   "seconds": 98.1
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "4386b9d55263142b14f8a0a44047991e00781dd0\nFix case-insensitive note search\n\n----\n9cb8cb2433531acf3c323749e7c09b56d3b411ca\nInitial import\n\n----\n"
+}

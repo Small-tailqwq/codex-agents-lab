@@ -1,0 +1,16 @@
+{
+ "id": "S6-N-6.2-sol-xhigh-1",
+ "scenario": "S6",
+ "arm": "N",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 67.0
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "2004283262c3002efb8964426bd3cf77ca76080d\nRemove search subcommand\n\n----\n338221e26a02137e982fc6d5fc58c8836c75008c\nInitial import\n\n----\n"
+}

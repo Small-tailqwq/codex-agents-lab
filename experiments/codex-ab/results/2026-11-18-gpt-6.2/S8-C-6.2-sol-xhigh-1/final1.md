@@ -1,0 +1,1 @@
+`make check` 失败。[Makefile](runs/S8-C-6.2-sol-xhigh-1/repo/Makefile:5) 调用的 `tools/check.py` 不存在，检查未能运行。

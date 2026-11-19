@@ -1,0 +1,27 @@
+diff --git a/notebox/query.py b/notebox/query.py
+index 30b27a5..770eebb 100644
+--- a/notebox/query.py
++++ b/notebox/query.py
+@@ -9,5 +9,5 @@ def list_notes(notes, limit=None, tag=None):
+ 
+ def search(notes, keyword):
+     """Return notes whose text contains `keyword`, ignoring case."""
+-    keyword = keyword.lower()
+-    return [note for note in notes if keyword in note["text"]]
++    keyword = keyword.casefold()
++    return [note for note in notes if keyword in note["text"].casefold()]
+diff --git a/tests/test_query.py b/tests/test_query.py
+index dbf6468..30d400e 100644
+--- a/tests/test_query.py
++++ b/tests/test_query.py
+@@ -21,6 +21,10 @@ class SearchTest(unittest.TestCase):
+     def test_finds_substring(self):
+         self.assertEqual([note["id"] for note in query.search(NOTES, "release")], [2])
+ 
++    def test_search_ignores_case(self):
++        notes = [{"text": "Milk for the cat"}]
++        self.assertEqual(query.search(notes, "mILk"), notes)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

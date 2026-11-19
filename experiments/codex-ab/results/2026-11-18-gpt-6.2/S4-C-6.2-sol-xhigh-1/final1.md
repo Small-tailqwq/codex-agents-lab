@@ -1,0 +1,3 @@
+**两个进程同时对同一个文件执行 `add` 不安全。** 如果两边都读到了最大 ID 为 12 的旧数据，就都会给新笔记分配 ID 13。即使两个命令都显示成功，后一次整文件写入也可能覆盖前一次，导致一条笔记丢失。[store.py](runs/S4-C-6.2-sol-xhigh-1/repo/notebox/store.py:27)
+
+notebox 把所有笔记存成一个 UTF-8 JSON 数组，每条有 `id`、`text` 和 `tags`。默认路径是当前工作目录下的 `data/notes.json`，可用 `NOTEBOX_FILE` 指定其他路径。每次 `add` 都会读入整个数组，用最大 ID 加 1，追加笔记，再用 `w` 模式截断并重写原文件。整个过程没有进程间锁，也没有原子替换。如果另一个进程恰好在写入中途读取，`load()` 会把 JSON 解析错误当成空列表，随后一次保存就可能只留下新加的那条笔记。[store.py](runs/S4-C-6.2-sol-xhigh-1/repo/notebox/store.py:4)

@@ -1,0 +1,1 @@
+`make check` 失败，退出码为 `1`。Makefile 调用了 `python tools/check.py`，但仓库中缺少该脚本，检查未能开始。

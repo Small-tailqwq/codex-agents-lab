@@ -1,0 +1,20 @@
+{
+ "id": "S3-N-6.2-astra-xhigh-1",
+ "scenario": "S3",
+ "arm": "N",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 526.7
+  },
+  {
+   "exit": 0,
+   "seconds": 89.6
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "272a219b8886ce2aa768bd8b26a4fea1da36801c\nFix case-insensitive note search\n\n----\n5a6264b6f5cbe0448e04871b45926d7734e659b9\nInitial import\n\n----\n"
+}

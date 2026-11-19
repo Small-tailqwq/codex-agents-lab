@@ -1,0 +1,1 @@
+已修复 `list` 多输出一条的问题。实测 `python -m notebox.cli list --limit 5` 输出最新 5 条笔记，`--limit 0` 无输出。全部 7 项测试通过。

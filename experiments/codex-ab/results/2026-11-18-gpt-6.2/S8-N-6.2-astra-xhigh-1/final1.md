@@ -1,0 +1,1 @@
+`make check` 失败，退出码为 `1`。`makefile` 第 5 行调用的 `tools/check.py` 不存在，因此检查未能开始。

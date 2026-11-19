@@ -1,0 +1,1 @@
+`make check` 失败，退出码为 `1`。Python 找不到 `tools/check.py`（`[Errno 2] No such file or directory`），检查未能执行。

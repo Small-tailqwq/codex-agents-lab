@@ -1,0 +1,16 @@
+{
+ "id": "S6-N-6.2-sol-xhigh-2",
+ "scenario": "S6",
+ "arm": "N",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 69.7
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "68b7312a573da33e7a05b9320d260412abe7c36e\nRemove search command from notebox\n\n----\n3e60a4f8b6629605296adf863100e539ca4b36a1\nInitial import\n\n----\n"
+}

@@ -1,0 +1,1 @@
+`make check` 失败，退出码为 `1`。[makefile](runs/S8-L-6.2-sol-xhigh-1/repo/makefile:5) 调用的 `tools/check.py` 在工作区中缺失，Python 报错 `[Errno 2] No such file or directory`，检查未能运行。

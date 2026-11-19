@@ -1,0 +1,4 @@
+interface:
+  display_name: "AGENTS Composer"
+  short_description: "Compose AGENTS.md from tested fragments"
+  default_prompt: "Use $agents-composer to set up my AGENTS.md. Ask me what you need to know, show me the draft, and install it only after I approve."

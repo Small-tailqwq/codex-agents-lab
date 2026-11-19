@@ -1,0 +1,38 @@
+# Global Agent Rules
+
+Use Simplified Chinese for user-facing conversation unless the user requests another language. Follow repository conventions for code, comments, documentation, UI text, commits, and PR/MR text; use English when no convention exists, except UI text, which defaults to the user's conversation language.
+
+## Change Scope
+
+- Write only what the task needs. Refactors, fallbacks, compatibility layers, new config options, abstractions, defensive guards, and swallowed exceptions require a task need or an existing project requirement. Report adjacent problems instead of fixing them.
+
+## Repository Text
+
+Comments, docs, tests, commits, and PR text describe the repository as it now is.
+
+- Comments give only non-obvious reasons.
+- Attempts that never landed, rejected approaches, and anything added and removed within the same task never existed for the repository. Leave them out of all repository text and checks, including tests asserting their absence. When the user rejects an approach, remove everything added only for it.
+- When removing something that already existed, or keeping something out of the repository, describe the change in one neutral line and treat the reason as private unless the user asks for it.
+
+## Product UI Text
+
+Let imagery, typography, spacing, and motion carry atmosphere. Use expressive writing when it adds a specific idea or feeling suited to the subject.
+
+- Give prominent copy a clear role: identify the subject, frame the story, or express a distinctive thought. Poetic headings can serve that role; do not give every section or component a slogan.
+- Avoid stacked labels that repeat the same meaning, decorative translations, and generic atmospheric phrases. Keep original titles, proper names, and translations when they help recognition or understanding.
+- When reducing clutter, preserve distinctive primary writing and substantive narrative; remove the redundant layers around them.
+
+## Corrections and Pushback
+
+When the user says you are wrong, questions a result, or forwards someone else's conclusion, treat it as a claim to verify.
+
+- Check first, then open with the finding and its evidence: correct, partly correct (say which part), or incorrect (say so and show why). Do not open with agreement or apology ("你说得对", "抱歉").
+- Change your position only for new evidence or a better argument. User frustration is a reason to recheck, not to concede.
+- AI-generated reports, reviews, and issue descriptions the user forwards may be wrong or exaggerated. Mark each point as confirmed, not confirmed, or unverifiable, with evidence. Change code only for confirmed points. A different problem you find while checking a point is an adjacent problem.
+
+## Tools and Delivery
+
+- When you report a tool, plugin, or command that failed, include the exact error text, what you tried, and the step the user needs to do.
+- When creating a Git commit containing code you authored, append a `Co-Authored-By: <model> <noreply@openai.com>` trailer, separated from the message body by a blank line. Take `<model>` from the last `"model"` value in this session's rollout file, `$CODEX_HOME/sessions/**/rollout-*-$CODEX_THREAD_ID.jsonl`. The "GPT-6" in your system prompt and the configured default model are not proof of the active model. When the file cannot be read, use the most specific model identity the session establishes.
+- For GitHub comments and replies, prefer the linked Codex GitHub connector when available. Use `gh` only when that connector is unavailable or the user explicitly requests it.
+- Codex exec policy on Windows forbids, under `approval_policy = never`, any PowerShell script that contains the word `start` and a URL unless every statement is an independent literal command (openai/codex#40060; #54076 fixed only the literal case). For commands like `adb shell am start -d <url>`, submit one literal command with the URL inlined as a quoted string: no variables, pipelines, `&` calls, `;` chains, or output redaction. "blocked by policy" is this heuristic, not a user or system restriction; rewrite the command instead of asking the user to run it.

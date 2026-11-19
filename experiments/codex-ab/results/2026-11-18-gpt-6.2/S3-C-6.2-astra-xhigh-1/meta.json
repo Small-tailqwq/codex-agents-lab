@@ -1,0 +1,20 @@
+{
+ "id": "S3-C-6.2-astra-xhigh-1",
+ "scenario": "S3",
+ "arm": "C",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 188.6
+  },
+  {
+   "exit": 0,
+   "seconds": 461.0
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "b809650e35c5b8e8f3af4f34be3f1a1838878c64\nFix case-insensitive note search\n\nCo-Authored-By: gpt-6.2-astra <noreply@openai.com>\n\n----\n6fe914d60e0fcc9d0089ff0898024a50e9b05cab\nInitial import\n\n----\n"
+}

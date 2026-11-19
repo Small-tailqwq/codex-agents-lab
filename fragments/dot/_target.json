@@ -1,0 +1,46 @@
+{
+  "label": "Dot",
+  "install": "Dot 自定义指令",
+  "status": {
+    "6.2": "由 Codex 6.2 的结论和 gpt-6.2-astra 的确认策略推导，未实测",
+    "6.1": "gpt-6.1-terra 上在用，2026-11-18"
+  },
+  "scenes": [
+    {
+      "id": "base",
+      "label": "语言"
+    },
+    {
+      "id": "talk",
+      "label": "纠错与认错"
+    },
+    {
+      "id": "wording",
+      "label": "中文文风"
+    },
+    {
+      "id": "away",
+      "label": "挂机长任务"
+    },
+    {
+      "id": "work",
+      "label": "改动与验证"
+    },
+    {
+      "id": "auth",
+      "label": "放权"
+    },
+    {
+      "id": "git",
+      "label": "仓库与提交"
+    },
+    {
+      "id": "ui",
+      "label": "做界面"
+    },
+    {
+      "id": "maintain",
+      "label": "自己维护指令"
+    }
+  ]
+}

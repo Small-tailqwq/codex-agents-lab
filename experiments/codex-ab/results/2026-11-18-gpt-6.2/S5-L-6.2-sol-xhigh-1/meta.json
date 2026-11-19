@@ -1,0 +1,16 @@
+{
+ "id": "S5-L-6.2-sol-xhigh-1",
+ "scenario": "S5",
+ "arm": "L",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 438.9
+  }
+ ],
+ "diff_stat": "",
+ "status": "?? index.html\n",
+ "log": "0415c3640f41647facc5409d3f86f8d6b69a4649\nInitial import\n\n----\n"
+}

@@ -1,0 +1,16 @@
+{
+ "id": "S6-L-6.2-astra-xhigh-2",
+ "scenario": "S6",
+ "arm": "L",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 78.3
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "9ada8bb95cd243c4d38d1f6afbfeac5c13fec660\nRemove the search subcommand\n\nCo-Authored-By: GPT-6 <noreply@openai.com>\n\n----\n866c1f4ee24faf8831e4e226114d2c5751cca062\nInitial import\n\n----\n"
+}

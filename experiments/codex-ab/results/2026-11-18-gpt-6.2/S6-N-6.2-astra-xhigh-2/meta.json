@@ -1,0 +1,16 @@
+{
+ "id": "S6-N-6.2-astra-xhigh-2",
+ "scenario": "S6",
+ "arm": "N",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 66.3
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "a0d814d0edaff6b0d5d3493ba09442a0d811ea73\nRemove the search subcommand from the free edition\n\n----\nfb07bc85e0ce7606690621c276cfe5e5795f6136\nInitial import\n\n----\n"
+}

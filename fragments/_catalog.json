@@ -1,0 +1,26 @@
+{
+  "series": [
+    {
+      "id": "6.2",
+      "label": "GPT-6.2",
+      "models": "Sol · Astra"
+    },
+    {
+      "id": "6.1",
+      "label": "GPT-6.1 / 6",
+      "models": "Terra · GPT-6 Astra"
+    }
+  ],
+  "evidence": {
+    "tested": "实测",
+    "in-use": "在用",
+    "derived": "推导",
+    "preference": "偏好"
+  },
+  "evidence_hint": {
+    "tested": "有对照实验数据",
+    "in-use": "来自真实会话里反复出现的问题，没有做对照实验",
+    "derived": "由系统提示或平台策略文本推出，没有实测",
+    "preference": "个人偏好，按自己的习惯改"
+  }
+}

@@ -1,0 +1,1 @@
+`make check` 失败。Makefile 第 5 行调用 `python tools/check.py`，但当前仓库缺少该脚本，检查未执行。

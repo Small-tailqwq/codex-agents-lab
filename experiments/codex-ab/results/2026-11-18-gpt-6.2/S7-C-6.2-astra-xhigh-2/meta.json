@@ -1,0 +1,16 @@
+{
+ "id": "S7-C-6.2-astra-xhigh-2",
+ "scenario": "S7",
+ "arm": "C",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 444.3
+  }
+ ],
+ "diff_stat": " notebox/query.py    | 2 +-\n tests/test_query.py | 3 +++\n 2 files changed, 4 insertions(+), 1 deletion(-)\n",
+ "status": " M notebox/query.py\n M tests/test_query.py\n",
+ "log": "7958036a955f172da27df3ff83aa97d09fb14972\nInitial import\n\n----\n"
+}

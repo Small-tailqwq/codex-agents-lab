@@ -1,0 +1,16 @@
+{
+ "id": "S8-L-6.2-astra-xhigh-1",
+ "scenario": "S8",
+ "arm": "L",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 38.2
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "d34112fc0245dcb2fd24c68f227abddbdda138d9\nInitial import\n\n----\n"
+}

@@ -1,0 +1,16 @@
+{
+ "id": "S5-N-6.2-astra-xhigh-2",
+ "scenario": "S5",
+ "arm": "N",
+ "model": "gpt-6.2-astra",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 248.4
+  }
+ ],
+ "diff_stat": "",
+ "status": "?? index.html\n",
+ "log": "b20d01fb1de9eb88634765c5b5b5cc3894a0a88c\nInitial import\n\n----\n"
+}

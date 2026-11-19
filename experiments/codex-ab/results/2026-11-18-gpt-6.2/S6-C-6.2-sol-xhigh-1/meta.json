@@ -1,0 +1,16 @@
+{
+ "id": "S6-C-6.2-sol-xhigh-1",
+ "scenario": "S6",
+ "arm": "C",
+ "model": "gpt-6.2-sol",
+ "effort": "xhigh",
+ "turns": [
+  {
+   "exit": 0,
+   "seconds": 78.5
+  }
+ ],
+ "diff_stat": "",
+ "status": "",
+ "log": "2a6fe8a8fd650c7c9e2f06e231c2bb90cfdb2b5d\nRemove the search subcommand\n\nCo-Authored-By: gpt-6.2-sol <noreply@openai.com>\n\n----\n0812408ca967cadcac90ff083130660d4526b396\nInitial import\n\n----\n"
+}
